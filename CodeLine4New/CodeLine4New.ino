@@ -39,24 +39,21 @@
 #define led1 13
 
 //motors
-#define bin1 8
-#define bin2 7
+#define bin1 7
+#define bin2 8
 #define pwmb 6
-#define ain1 3
-#define ain2 4
+#define ain1 4
+#define ain2 3
 #define pwma 5
 
 //HC_SR04
-#define trig 11 //chân trig của HC-SR04
-#define echo 12//chân echo của HC-SR04
-#define maximum_distance 200
+
 
 //QTR
 #define NUM_SENSORS 8
 #define EMITTER_PIN 9
 
 QTRSensors qtra;
-NewPing sonar(trig, echo, maximum_distance);
 uint16_t sensorValues[NUM_SENSORS];
 int P = 0;
 int I = 0;
@@ -69,7 +66,7 @@ int maria=0;
 
 ////////////////////Dieu chinh PID/////////////////////////////////
 // Khai báo tốc độ ban đầu
-int TocDobandau = 85;
+int TocDobandau = 255;
 
 
 //float KP = 0.19, KI = 0.001, KD = 0.4;
@@ -92,8 +89,6 @@ void setup() {
   pinMode(ain1, OUTPUT);
   pinMode(ain2, OUTPUT);
   pinMode(pwma, OUTPUT);
-  pinMode(trig,OUTPUT);//chân trig sẽ phát tín hiệu
-  pinMode(echo,INPUT);//chân echo sẽ nhận tín hiệu
   digitalWrite(led1, HIGH);
   delay(200);
   digitalWrite(led1, LOW);
@@ -109,7 +104,7 @@ Serial.begin(115200);
 //  }
   for (int i = 0; i < 400; i++){
     if (i % 5 == 0) {
-      DieuKhienMotor(80, -80);
+      DieuKhienMotor(160, -160);
     }
     Serial.println(i);
     qtra.calibrate();
@@ -134,6 +129,7 @@ Serial.begin(115200);
 }
 
 void loop() {
+  
    for (uint8_t i = 0; i < NUM_SENSORS ; i++)
    {
    Serial.print(sensorValues[i]);
@@ -322,11 +318,4 @@ void DieuKhienMotor(int motor_phai, int motor_trai) {
 
 void botones() {
   boton2 = digitalRead(btn1);
-}
-int readPing(){
-  int cm = sonar.ping_cm();
-  if (cm==0){
-    cm=250;
-  }
-  return cm;
 }
